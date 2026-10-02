@@ -18,7 +18,7 @@ main{max-width:1180px;margin:auto;padding:0 24px 60px}
 .hint{color:var(--muted);margin-top:auto} .def{font-size:22px;line-height:1.55;margin:22px 0} .example{margin-top:auto;background:#f7f7fa;border-radius:18px;padding:18px;line-height:1.5} .example b{display:block;margin-bottom:6px}
 .side{background:#fff;border:1px solid var(--line);border-radius:22px;padding:18px;position:sticky;top:14px} .side h3{margin:2px 0 12px} .controls{display:grid;gap:9px} .grade{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:12px} .grade button{padding:11px 6px;font-size:13px} .g{color:var(--good)}.m{color:var(--mid)}.b{color:var(--bad)}
 .progress{height:8px;background:#eceef1;border-radius:99px;overflow:hidden;margin:14px 0} .bar{height:100%;background:var(--accent);width:0}
-.list{margin-top:28px} .list h2{font-size:26px;letter-spacing:-.03em} .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px} .mini{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;cursor:pointer} .mini:hover{transform:translateY(-1px)} .mini small{color:var(--muted)} .mini strong{display:block;margin-top:5px}
+.list{margin-top:28px} .list h2{font-size:26px;letter-spacing:-.03em} .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px} .mini{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;cursor:pointer} .mini:hover{transform:translateY(-1px)} .mini small{color:var(--muted)} .mini strong{display:block;margin-top:5px}.pathline{display:block;margin:7px 0 5px;line-height:1.35;color:var(--accent)!important}
 
 .navtabs{max-width:1180px;margin:auto;padding:0 24px 18px;display:flex;gap:8px}.navtab{border-radius:999px;padding:11px 18px}.navtab.active{background:var(--ink);color:#fff;border-color:var(--ink)}
 .quizView{display:none;max-width:1180px;margin:auto;padding:0 24px 60px}.quizView.active{display:block}.flashView.hidden{display:none}
@@ -64,22 +64,80 @@ const consolidatedCards=[
 {term:"Thorsrudprosjektets seks grunnleggende behov",module:"Selvledelse",type:"Teori",definition:"Thorsrudprosjektet beskrev seks grunnleggende behov i arbeidslivet: 1) rimelige utfordringer og variasjon, 2) læring og fortsatt utvikling, 3) egen beslutningsmyndighet og ansvar, 4) sosial støtte og anseelse, 5) sammenheng mellom arbeidet og sosialt liv i videre forstand, og 6) at jobben gir mulighet for personlig vekst og karriereutvikling.",example:"En jobb med varierte oppgaver, læring, ansvar, støtte og utviklingsmuligheter dekker flere av behovene samtidig."}
 ];
 for(const c of consolidatedCards){if(!all.some(x=>x.term===c.term)) all.push(c);}
+
+// --- Tydlig begreppshierarki: visar vilket huvudbegrepp varje kort hör till ---
+const hierarchyGroups = [
+  ['Prokrastinering', ['Strategisk utsettelse','Differensialpsykologisk perspektiv','Motivasjonspsykologisk perspektiv på prokrastinering','Klinisk-psykologisk perspektiv','Situasjonspsykologisk perspektiv','Strategier mot prokrastinering']],
+  ['Selvledelse → Atferdsfokuserte strategier', ['Selvobservasjon','Målsetting','Trening, læring og fokusering','Selvbelønning','Selvkorrigerende tilbakemeldinger','Observasjonslæring – Bandura','Kolbs læringssirkel']],
+  ['Selvledelse → Naturlig belønnende strategier', ['Oppgaveorienterte naturlige belønninger','Relasjonsorienterte naturlige belønninger','Oppmerksomhetsorienterte naturlige belønninger']],
+  ['Selvledelse → Kognitive strategier', ['Visualisering','Mestringstro som selvledelsesstrategi','Mulighet vs. hindring','Selvsnakk','Grunnantakelser','Endre negative grunnantakelser','ABCDE-modellen']],
+  ['Selvledelse → Kognitive strategier → ABCDE-modellen', ['A – Activating event','B – Belief','C – Consequence','D – Dispute','E – Effects']],
+  ['Selvledelse → De fire sfærene', ['Arbeidersfæren','Privatsfæren','Fritidsfæren','Utdanningsfæren']],
+  ['Arbeidsmiljøtradisjonen → Thorsrudprosjektet', ['Thorsrud: variasjon og utfordringer','Thorsrud: læring i jobben','Thorsrud: beslutningsmyndighet og ansvar','Thorsrud: sosial støtte og anseelse','Thorsrud: sammenheng med sosialt liv','Thorsrud: personlig vekst og karriereutvikling','Thorsrudprosjektets seks grunnleggende behov']],
+  ['Superledelse → Betingelser', ['Strukturelle betingelser for superledelse','Prosessuelle betingelser for superledelse','Samhandlingsmessige betingelser for superledelse']],
+  ['Motivasjon → Selvbestemmelsesteorien (SDT)', ['Autonomi','Kompetanse / mestring','Tilhørighet / relasjoner']],
+  ['Motivasjon → Målorientering', ['Mestringsorientering','Prestasjonsorientering']],
+  ['Motivasjon → Mental innstilling / mindset', ['Growth mindset','Fixed mindset']],
+  ['Motivasjon → Jobbrelatert velvære', ['Hedonisme','Eudaimonisme']],
+  ['Motivasjon → Prososial motivasjon', ['Adam Grants callsenterstudie','Fallgruve ved prososial motivasjon']],
+  ['Psykologisk myndiggjøring', ['Mening i psykologisk bemyndiggjøring','Kompetanse i psykologisk bemyndiggjøring','Selvbestemmelse i psykologisk bemyndiggjøring','Påvirkning i psykologisk bemyndiggjøring']],
+  ['Job crafting', ['Job crafting: oppgaver','Job crafting: relasjoner','Job crafting: omgivelser']],
+  ['Jobbkarakteristikamodellen', ['Ferdighetsvariasjon','Oppgaveidentitet','Oppgavebetydning','Tilbakemelding i Jobbkarakteristikamodellen']],
+  ['Krav-kontroll-modellen', ['Aktivt arbeid','Høybelastningsarbeid','Lavbelastningsarbeid','Passivt arbeid']],
+  ['Jobbkrav-ressursmodellen (JD-R)', ['Jobbkrav','Jobbressurser']],
+  ['Arbeidsklima', ['Mestringsklima','Prestasjonsklima','Ytringsklima','Innovasjonsklima']],
+  ['Prestasjonsledelse → Medarbeidersamtale', ['Utviklende formål med medarbeidersamtalen','Administrative formål med medarbeidersamtalen']],
+  ['Tillit', ['Identifikasjonsbasert tillit','Kalkulativ tillit','Akutt tillit']],
+  ['Organisatorisk rettferdighet', ['Fordelingsrettferdighet','Prosedyrerettferdighet','Interaksjonsrettferdighet']],
+  ['LMX – Leader-Member Exchange', ['Høykvalitetsrelasjon i LMX','Lavkvalitetsrelasjon i LMX']],
+  ['Psykologisk kontrakt', ['Brudd på psykologisk kontrakt']],
+  ['McClellands behovsteori', ['Prestasjonsmotiv – McClelland','Tilhørighetsmotiv – McClelland','Maktmotiv – McClelland','Personorientert makt','Sosialisert makt']],
+  ['Ledelse → Lederformer', ['Autoritær ledelse','Demokratisk ledelse','La-det-skure-ledelse / laissez-faire','Transformasjonsledelse','Transaksjonsledelse']],
+  ['Destruktiv ledelse', ['Narsissisme hos leder','Ineffektiv ledelse','Forebygging av destruktiv ledelse']],
+  ['Stress → Perspektiver', ['Stimulusperspektivet på stress','Responsperspektivet på stress','Transaksjonsperspektivet']],
+  ['Stress → Stressorer', ['Fysiske stressorer','Psykiske stressorer','Sosiale stressorer','Arbeidsoppgaver som stressor','Rollekrav som stressor','Rolleoverbelastning','Rolleuklarhet','Mellommenneskelige relasjoner som stressor','Karriereutvikling som stressor','Organisatoriske forhold som stressor','Mangel på autonomi som stressor']],
+  ['Stress → Teknostress', ['Tekno-overbelastning','Tekno-invasjon','Tekno-kompleksitet','Tekno-usikkerhet','Tekno-utrygghet']],
+  ['Stress → GAS – General Adaptation Syndrome', ['Alarmreaksjon – GAS','Motstandsfasen – GAS','Utmattelsesfasen – GAS']],
+  ['Stress → Transaksjonsperspektivet → Lazarus & Folkman', ['Primær evaluering – Lazarus & Folkman','Sekundær evaluering – Lazarus & Folkman','Revurdering – Lazarus & Folkman']],
+  ['Stress → CATS', ['Stimuli i CATS','Hjernens oppfattelse av stressfaktoren – CATS','Alarm – CATS','Hjernens oppfattelse av alarmen – CATS']],
+  ['Stress → Jobbusikkerhet', ['Kvantitativ jobbusikkerhet','Kvalitativ jobbusikkerhet','Employability']],
+  ['Stress → Utbrenthet', ['Emosjonell utmattelse','Depersonalisering / kynisme','Redusert personlig mestring','Risikofaktorer for utbrenthet']],
+  ['Stress → Mestring og forebygging', ['Forebygging av stress','Problemorientert mestring','Følelsesorientert mestring','Sosial støtte som stressbuffer','Fysisk aktivitet som stressmestring']],
+  ['Stress → Arbeid og privatliv', ['Spillover','Crossover']],
+  ['Motivasjon → McGregors teori', ['McGregors teori X','McGregors teori Y']]
+];
+const hierarchyMap={}; hierarchyGroups.forEach(([parent,terms])=>terms.forEach(term=>hierarchyMap[term]=parent));
+// Huvudkort får också en tydlig överkategori när det hjälper orienteringen.
+Object.assign(hierarchyMap, {
+ 'Atferdsfokuserte strategier':'Selvledelse → Tre hovedstrategier',
+ 'Naturlig belønnende strategier':'Selvledelse → Tre hovedstrategier',
+ 'Kognitive strategier':'Selvledelse → Tre hovedstrategier',
+ 'Prokrastinering':'Selvledelse', 'Superledelse':'Selvledelse',
+ 'Selvbestemmelsesteorien (SDT)':'Motivasjon', 'Jobbkarakteristikamodellen':'Motivasjon',
+ 'Krav-kontroll-modellen':'Motivasjon / Stress', 'Jobbkrav-ressursmodellen (JD-R)':'Motivasjon / Stress',
+ 'Teknostress':'Stress', 'GAS – General Adaptation Syndrome':'Stress', 'CATS – Cognitive Activation Theory of Stress':'Stress',
+ 'Utbrenthet':'Stress', 'Arbeidsnarkomani':'Stress'
+});
+all.forEach(x=>{x.parent=hierarchyMap[x.term]||'';});
+function cardPath(x){return x.parent ? x.parent+' → '+x.term : x.module+' → '+x.term;}
+function cardMeta(x){return x.parent ? x.parent+' · '+x.type : x.module+' · '+x.type;}
+
 let grades=JSON.parse(localStorage.getItem('sms-grades')||'{}'), deck=[], idx=0;
 const $=id=>document.getElementById(id);
 const types=[...new Set(all.map(x=>x.type))].sort(); types.forEach(x=>$('type').insertAdjacentHTML('beforeend',`<option>${x}</option>`));
 function apply(){
  const q=$('search').value.toLowerCase(), m=$('module').value,t=$('type').value,s=$('status').value;
- deck=all.filter(x=>(!q||(x.term+' '+x.definition+' '+x.example).toLowerCase().includes(q))&&(!m||x.module===m)&&(!t||x.type===t)&&(!s||(s==='unrated'?!grades[x.term]:grades[x.term]===s)));
+ deck=all.filter(x=>(!q||(x.term+' '+x.definition+' '+x.example+' '+(x.parent||'')).toLowerCase().includes(q))&&(!m||x.module===m)&&(!t||x.type===t)&&(!s||(s==='unrated'?!grades[x.term]:grades[x.term]===s)));
  idx=Math.min(idx,Math.max(0,deck.length-1)); render(); renderGrid(); stats();
 }
 function render(){
  if(!deck.length){$('term').textContent='Inga kort matchar filtret';$('definition').textContent='Ändra sökning eller filter.';$('example').textContent='';$('position').textContent='0 / 0';return}
  const x=deck[idx]; $('card').classList.remove('flipped'); $('term').textContent=x.term;$('definition').textContent=x.definition;$('example').textContent=x.example;
- $('frontTag').textContent=x.module+' · '+x.type;$('backTag').textContent=x.module+' · '+x.type;
+ $('frontTag').textContent=cardMeta(x);$('backTag').textContent=cardPath(x);
  $('position').textContent=(idx+1)+' / '+deck.length; $('bar').style.width=((idx+1)/deck.length*100)+'%';
 }
 function renderGrid(){
- $('grid').innerHTML=deck.map((x,i)=>`<div class="mini" data-i="${i}"><small>${x.module} · ${x.type}</small><strong>${x.term}</strong><small>${grades[x.term]?({known:'✓ Kan',uncertain:'~ Osäker',unknown:'× Kan inte'}[grades[x.term]]):'Ej testad'}</small></div>`).join('');
+ $('grid').innerHTML=deck.map((x,i)=>`<div class="mini" data-i="${i}"><small>${cardMeta(x)}</small><strong>${x.term}</strong><small class="pathline">↳ ${cardPath(x)}</small><small>${grades[x.term]?({known:'✓ Kan',uncertain:'~ Osäker',unknown:'× Kan inte'}[grades[x.term]]):'Ej testad'}</small></div>`).join('');
  document.querySelectorAll('.mini').forEach(el=>el.onclick=()=>{idx=+el.dataset.i;render();scrollTo({top:150,behavior:'smooth'})})
 }
 function stats(){
@@ -113,7 +171,7 @@ function nextQuizQuestion(){
  if(!quizPool.length){buildQuizPool();return}
  if(quizIndex>=quizPool.length){quizPool.sort(()=>Math.random()-.5);quizIndex=0}
  quizCurrent=makeQuestion(quizPool[quizIndex++]); quizSeen++;
- $('quizQuestion').textContent=quizCurrent.q; $('quizTag').textContent=quizCurrent.x.module+' · '+quizCurrent.x.type;
+ $('quizQuestion').textContent=quizCurrent.q; $('quizTag').textContent=cardMeta(quizCurrent.x);
  $('quizInput').value=''; $('modelAnswer').classList.remove('show');
  // Facit anpassas efter vad frågan faktiskt frågar efter.
  const answerTitle = quizCurrent.mode==='identify' ? quizCurrent.x.term : quizCurrent.x.definition;
